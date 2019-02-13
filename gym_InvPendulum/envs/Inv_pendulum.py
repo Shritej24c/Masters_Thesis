@@ -50,10 +50,15 @@ class InvPendulumEnv(gym.Env):
 
         I = m * (l ** 2)                                                    # Moment of Inertia
 
-        newthdot = thdot + (tor_t + m * g * l * np.sin(th) - b * thdot - k * thdot) / I * dt        # dynamical equation
+        newthdot = thdot + (tor_t + m * g * l * np.sin(th) - b * thdot - k * thdot) / I * dt
+
+        # dynamical equation solved by euler method
 
         newth = th + newthdot * dt
+
         newthdot = np.clip(newthdot, -self.max_thetadot, self.max_thetadot)
+
+        #Clipping the value of angular velocity
 
         self.state = np.array([newth, newthdot])
 
@@ -73,7 +78,7 @@ class InvPendulumEnv(gym.Env):
         init_th = ((random.random() - 0.5) * 2) * 5
         init_thr = init_th * np.pi / 180
         init_thdotr = ((random.random() - 0.5) * 2) * 0.0625
-        self.state = np.array([init_thr, init_thdotr])
+        self.state = np.array([init_thr, init_th dotr])
         self.action = 0
         return self.state
 
