@@ -24,11 +24,10 @@ class InvPendulumEnv(gym.Env):
 
         self.action_space = spaces.Box(low=-self.max_torque, high=self.max_torque, shape=(1,), dtype=np.float32)
         self.observation_space = spaces.Box(low=-bounds, high=bounds, dtype=np.float32)
-
         self.seed()
 
     def seed(self, seed=None):
-        self.np_random, seed = seeding.np_random(seed)
+        _, seed = seeding.np_random(seed)
         return [seed]
 
     def step(self, tor):
@@ -44,21 +43,24 @@ class InvPendulumEnv(gym.Env):
         k = 8               # stiffness constant
         c = np.sqrt(40)     # noise amplitude
 
-        tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)      # Torque applied by the controller with additive white gaussian noise
+        tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)
+        # Torque applied by the controller with additive white gaussian noise
 
-        tor_t = a * tor_con + (1 - a) * tor_prev                            # Torque at time t with filtering
+        tor_t = a * tor_con + (1 - a) * tor_prev
+        # Torque at time t with filtering
 
-        I = m * (l ** 2)                                                    # Moment of Inertia
+        I = m * (l ** 2)
+        # Moment of Inertia
 
         newthdot = thdot + (tor_t + m * g * l * np.sin(th) - b * thdot - k * thdot) / I * dt
-
         # dynamical equation solved by euler method
 
         newth = th + newthdot * dt
 
         newthdot = np.clip(newthdot, -self.max_thetadot, self.max_thetadot)
-
         #Clipping the value of angular velocity
+
+
 
         self.state = np.array([newth, newthdot])
 
@@ -78,9 +80,45 @@ class InvPendulumEnv(gym.Env):
         init_th = ((random.random() - 0.5) * 2) * 5
         init_thr = init_th * np.pi / 180
         init_thdotr = ((random.random() - 0.5) * 2) * 0.0625
-        self.state = np.array([init_thr, init_th dotr])
+        self.state = np.array([init_thr, init_thdotr])
         self.action = 0
         return self.state
+
+
+    def render(self, mode='human'):
+
+        if self.viewer is None:
+            from gym.envs.classic_control import rendering
+            self.viewer = rendering.Viewer(500, 500)
+            self.viewer.set_bounds(-2.2, 2.2, -2.2, 2.2)
+
+            rod = rendering.make_capsule(1, .2)
+            rod.set_color(.3, .8, .3)
+            self.pole_transform = rendering.Transform()
+            rod.add_attr(self.pole_transform)
+            self.viewer.add_geom(rod)
+
+            axle = rendering.make_circle(.05)
+            axle.set_color(0, 0, 0)
+            self.viewer.add_geom(axle)
+
+            fname = path.join(path.dirname(__file__), "assets/clockwise.png")
+            self.img = rendering.Image(fname, 1., 1.)
+            self.imgtrans = rendering.Transform()
+            self.img.add_attr(self.imgtrans)
+
+        self.viewer.add_onetime(self.img)
+        self.pole_transform.set_rotation(self.state[0] + np.pi / 2)
+        if self.action != 0:
+            self.imgtrans.scale = (-self.action/ 2, np.abs(self.action) / 2)
+
+        return self.viewer.render(return_rgb_array=mode == 'rgb_array')
+
+    def close(self):
+        if self.viewer:
+            self.viewer.close()
+            self.viewer = None
+
 
 
 
