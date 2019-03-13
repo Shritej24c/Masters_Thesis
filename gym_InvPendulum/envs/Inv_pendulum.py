@@ -1,4 +1,4 @@
-import gym
+ddimport gym
 import numpy as np
 from gym import error, spaces, utils
 from gym.utils import seeding
@@ -20,10 +20,10 @@ class InvPendulumEnv(gym.Env):
         self.dt = 0.01
         self.viewer = None
 
-        bounds = np.array([self.max_theta, self.max_thetadot])
+        #bounds = np.array([self.max_theta, self.max_thetadot])
 
         self.action_space = spaces.Box(low=-self.max_torque, high=self.max_torque, shape=(1,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=-bounds, high=bounds, dtype=np.float32)
+        self.observation_space = spaces.Box(low=np.array([0, -np.sin(self.max_theta), -self.max_thetadot]), high=np.array([np.cos(self.max_theta), np.sin(self.max_theta), self.max_thetadot]), dtype=np.float32)
         self.seed()
 
     def seed(self, seed=None):
@@ -60,8 +60,6 @@ class InvPendulumEnv(gym.Env):
         newthdot = np.clip(newthdot, -self.max_thetadot, self.max_thetadot)
         #Clipping the value of angular velocity
 
-
-
         self.state = np.array([newth, newthdot])
 
         self.action = tor_t
@@ -74,7 +72,7 @@ class InvPendulumEnv(gym.Env):
         else:
             reward = 0
 
-        return self.state, reward, False, {}
+        return self._get_obs(), reward, False, {}
 
     def reset(self):
         init_th = ((random.random() - 0.5) * 2) * 5
@@ -82,7 +80,11 @@ class InvPendulumEnv(gym.Env):
         init_thdotr = ((random.random() - 0.5) * 2) * 0.0625
         self.state = np.array([init_thr, init_thdotr])
         self.action = 0
-        return self.state
+        return self._get_obs()
+
+    def _get_obs(self):
+        th, thdot = self.state
+        return np.array([np.cos(th), np.sin(th), thdot])
 
 
     def render(self, mode='human'):
@@ -93,7 +95,7 @@ class InvPendulumEnv(gym.Env):
             self.viewer.set_bounds(-2.2, 2.2, -2.2, 2.2)
 
             rod = rendering.make_capsule(1, .2)
-            rod.set_color(.3, .8, .3)
+            rod.set_color(.3, .3, .8)
             self.pole_transform = rendering.Transform()
             rod.add_attr(self.pole_transform)
             self.viewer.add_geom(rod)
@@ -102,17 +104,18 @@ class InvPendulumEnv(gym.Env):
             axle.set_color(0, 0, 0)
             self.viewer.add_geom(axle)
 
-            fname = path.join(path.dirname(__file__), "assets/clockwise.png")
-            self.img = rendering.Image(fname, 1., 1.)
+            fname = path.join(path.dirname(__file__), "clockwise.png")
+            self.img = rendering.Image(fname, 0.5, 0.5)
             self.imgtrans = rendering.Transform()
             self.img.add_attr(self.imgtrans)
 
         self.viewer.add_onetime(self.img)
         self.pole_transform.set_rotation(self.state[0] + np.pi / 2)
         if self.action != 0:
-            self.imgtrans.scale = (-self.action/ 2, np.abs(self.action) / 2)
+            self.imgtrans.scale = (-self.action / 2, np.abs(self.action) / 2)
 
         return self.viewer.render(return_rgb_array=mode == 'rgb_array')
+
 
     def close(self):
         if self.viewer:
