@@ -14,23 +14,19 @@ from Inv_pendulum import InvPendulumEnv
 
 env = InvPendulumEnv()
 
-#ENV_NAME = 'Pendulum-v0'
+#ENV_NAME = 'Inverted_Pendulum-v0'
 
 
 # Get the environment and extract the number of actions.
 #env = gym.make(ENV_NAME)
-#np.random.seed(123)
-#env.seed(123)
+np.random.seed(123)
+env.seed(123)
 assert len(env.action_space.shape) == 1
 nb_actions = env.action_space.shape[0]
 
 # Next, we build a very simple model.
 actor = Sequential()
 actor.add(Flatten(input_shape=(1,) + env.observation_space.shape))
-actor.add(Dense(16))
-actor.add(Activation('relu'))
-actor.add(Dense(16))
-actor.add(Activation('relu'))
 actor.add(Dense(16))
 actor.add(Activation('relu'))
 actor.add(Dense(nb_actions))
@@ -69,7 +65,8 @@ agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
 agent.fit(env, nb_steps=50000, visualize=True, verbose=1, nb_max_episode_steps=200)
 
 # After training is done, we save the final weights.
-agent.save_weights('ddpg_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
+agent.save_weights('ddpg_weights.hdf5', overwrite=True)
 
 # Finally, evaluate our algorithm for 5 episodes.
 agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=200)
+

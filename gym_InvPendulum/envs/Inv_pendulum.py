@@ -1,4 +1,4 @@
-ddimport gym
+import gym
 import numpy as np
 from gym import error, spaces, utils
 from gym.utils import seeding
@@ -20,10 +20,11 @@ class InvPendulumEnv(gym.Env):
         self.dt = 0.01
         self.viewer = None
 
-        #bounds = np.array([self.max_theta, self.max_thetadot])
+        bounds = np.array([self.max_theta, self.max_thetadot])
 
         self.action_space = spaces.Box(low=-self.max_torque, high=self.max_torque, shape=(1,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=np.array([0, -np.sin(self.max_theta), -self.max_thetadot]), high=np.array([np.cos(self.max_theta), np.sin(self.max_theta), self.max_thetadot]), dtype=np.float32)
+        #self.observation_space = spaces.Box(low=np.array([0, -np.sin(self.max_theta), -self.max_thetadot]), high=np.array([np.cos(self.max_theta), np.sin(self.max_theta), self.max_thetadot]), dtype=np.float32)
+        self.observation_space = spaces.Box(low=-bounds,high=bounds, dtype=np.float32)
         self.seed()
 
     def seed(self, seed=None):
@@ -31,8 +32,12 @@ class InvPendulumEnv(gym.Env):
         return [seed]
 
     def step(self, tor):
+        #print(tor, "Action provided for the next timestep")
         th, thdot = self.state
+        #print("Theta", "Thetadot", th, thdot,'\n')
+
         tor_prev = self.action      # Action at time t-1
+        #print("previous timestep torque", tor_prev)
 
         g = 9.8             # acceleration due to gravity
         m = 65              # Mass
@@ -43,28 +48,33 @@ class InvPendulumEnv(gym.Env):
         k = 8               # stiffness constant
         c = np.sqrt(40)     # noise amplitude
 
-        tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)
+        tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)[0]
         # Torque applied by the controller with additive white gaussian noise
-
-        tor_t = a * tor_con + (1 - a) * tor_prev
+        #print(tor_con,"torque by controller \n")
+        tor_t = a * tor_con + (1 - a) *  tor_prev
         # Torque at time t with filtering
 
+        #print(tor_t, "torque at time t\n")
         I = m * (l ** 2)
         # Moment of Inertia
 
         newthdot = thdot + (tor_t + m * g * l * np.sin(th) - b * thdot - k * thdot) / I * dt
         # dynamical equation solved by euler method
+        #print(newthdot, "newthetadot")
 
         newth = th + newthdot * dt
 
         newthdot = np.clip(newthdot, -self.max_thetadot, self.max_thetadot)
         #Clipping the value of angular velocity
+        #print("New thetadot and theta", newthdot, newth)
 
         self.state = np.array([newth, newthdot])
 
         self.action = tor_t
 
+        done = False
         if newth > np.pi/8 or newth < -np.pi/8:
+            done = True
             newth, newthdot = self.reset()
 
         if 0.0078 > newthdot > -0.0078 and 2.9504e4 > newth > -2.9504e-4:
@@ -72,20 +82,16 @@ class InvPendulumEnv(gym.Env):
         else:
             reward = 0
 
-        return self._get_obs(), reward, False, {}
+        return self.state, reward, done, {}
 
     def reset(self):
         init_th = ((random.random() - 0.5) * 2) * 5
         init_thr = init_th * np.pi / 180
         init_thdotr = ((random.random() - 0.5) * 2) * 0.0625
         self.state = np.array([init_thr, init_thdotr])
+        #print(self.state, "Initial State")
         self.action = 0
-        return self._get_obs()
-
-    def _get_obs(self):
-        th, thdot = self.state
-        return np.array([np.cos(th), np.sin(th), thdot])
-
+        return self.state
 
     def render(self, mode='human'):
 
@@ -94,15 +100,44 @@ class InvPendulumEnv(gym.Env):
             self.viewer = rendering.Viewer(500, 500)
             self.viewer.set_bounds(-2.2, 2.2, -2.2, 2.2)
 
-            rod = rendering.make_capsule(1, .2)
-            rod.set_color(.3, .3, .8)
-            self.pole_transform = rendering.Transform()
-            rod.add_attr(self.pole_transform)
-            self.viewer.add_geom(rod)
+            surface = rendering.Line(start=(-1.2, -0.05), end=(1.2, -0.05))
 
-            axle = rendering.make_circle(.05)
+            self.viewer.add_geom(surface)
+
+            bob = rendering.make_circle(0.15, filled=True)
+            bob.set_color(.8, .3, .2)
+            attributes = rendering.Transform(translation=(0.0, 1.0))
+            bob.add_attr(attributes)
+
+            rod = rendering.FilledPolygon([(-0.025, 0), (-0.025, 1.0 - 0.15), (0.025, 1.0 - 0.15), (0.025, 0)])
+            rod.set_color(0.2, 0.2, 0.7)
+
+            pendulum = rendering.Compound([bob, rod])
+            pendulum.set_color(0.4, 0.5, 1)
+            translate = rendering.Transform(translation=(0.0, -0.05))
+            pendulum.add_attr(translate)
+            self.pole_transform = rendering.Transform()
+            pendulum.add_attr(self.pole_transform)
+            self.viewer.add_geom(pendulum)
+
+            axle_fill = rendering.make_circle(radius=.1, res=30, filled=True)
+            axle_fill.set_color(1, 1, 1)
+
+            axle = rendering.make_circle(radius=0.1, res=30, filled=False)
+            semi = rendering.Transform(translation=(0.0, -0.05))
+            axle_fill.add_attr(semi)
+            axle.add_attr(semi)
             axle.set_color(0, 0, 0)
+
+            self.viewer.add_geom(axle_fill)
             self.viewer.add_geom(axle)
+
+            pivot = rendering.make_circle(0.02, filled=True)
+            self.viewer.add_geom(pivot)
+
+            hide = rendering.FilledPolygon([(-2.2, -0.07), (-2.2, -2.2), (2.2, -2.2), (2.2, -0.07)])
+            hide.set_color(1, 1, 1)
+            self.viewer.add_geom(hide)
 
             fname = path.join(path.dirname(__file__), "clockwise.png")
             self.img = rendering.Image(fname, 0.5, 0.5)
@@ -110,17 +145,17 @@ class InvPendulumEnv(gym.Env):
             self.img.add_attr(self.imgtrans)
 
         self.viewer.add_onetime(self.img)
-        self.pole_transform.set_rotation(self.state[0] + np.pi / 2)
+        self.pole_transform.set_rotation(self.state[0])
         if self.action != 0:
-            self.imgtrans.scale = (-self.action / 2, np.abs(self.action) / 2)
+            self.imgtrans.scale = (-self.action / 8, np.abs(self.action) / 8)
 
         return self.viewer.render(return_rgb_array=mode == 'rgb_array')
-
 
     def close(self):
         if self.viewer:
             self.viewer.close()
             self.viewer = None
+
 
 
 
