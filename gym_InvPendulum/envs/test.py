@@ -113,7 +113,7 @@ from keras.models import model_from_json
 
 Xnew = [np.array([[[0.29466096, 0.30317302]]])]
 
-json_file = open('model.json', 'r')
+json_file = open('tanh.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
@@ -121,7 +121,7 @@ loaded_model = model_from_json(loaded_model_json)
 #loaded_model.predict(Xnew)
 
 # load weights into new model
-loaded_model.load_weights("model.h5")
+loaded_model.load_weights("tanh.h5")
 #array = loaded_model.get_weights
 weights = np.array(loaded_model.get_weights())
 
@@ -204,14 +204,14 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
     video_recorder = None
     for i_episodes in range(num_episodes):
         video_recorder = VideoRecorder(
-            env=env, path=video_path[3], metadata=metadata, enabled=video_path is not None)
+            env=env, path=video_path, metadata=metadata, enabled=video_path is not None)
         obs = env.reset()
         for t in range(timesteps):
             obs = [np.array([[list(obs)]])]
-            env.render()
             video_recorder.capture_frame()
             action = model.predict(obs)[0]
             obs, rew, done, info = env.step(action)
+            env.render()
             theta.append(obs[0])
             theta_dot.append(obs[1])
             actions.append(action[0])
@@ -222,11 +222,16 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
                 print("Saved video.")
                 video_recorder.close()
                 video_recorder.enabled = False
+                break
     env.close()
     return theta
 
 
-play(env, loaded_model, videos, 1, 300, metadata_)
+import matplotlib.pyplot as plt
+
+plt.plot(play(env, loaded_model, "tanh.mp4", 1, 300, metadata_))
+plt.show()
+
 
 
 

@@ -6,7 +6,6 @@ from os import path
 import random
 
 
-
 class InvPendulumEnv(gym.Env):
     metadata = {
         'render.modes': ['human', 'rgb_array'],
@@ -16,7 +15,7 @@ class InvPendulumEnv(gym.Env):
     def __init__(self):
         self.max_theta = np.pi / 8  # rad
         self.max_thetadot = 0.5     # rad/sec
-        self.max_torque = 120       # N-m
+        self.max_torque = 300       # N-m
         self.dt = 0.01
         self.viewer = None
 
@@ -32,7 +31,9 @@ class InvPendulumEnv(gym.Env):
         return [seed]
 
     def step(self, tor):
+
         #print(tor, "Action provided for the next timestep")
+
         th, thdot = self.state
         #print("Theta", "Thetadot", th, thdot,'\n')
 
@@ -51,7 +52,8 @@ class InvPendulumEnv(gym.Env):
         tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)[0]
         # Torque applied by the controller with additive white gaussian noise
         #print(tor_con,"torque by controller \n")
-        tor_t = a * tor_con + (1 - a) *  tor_prev
+
+        tor_t = a * tor_con + (1 - a)*tor_prev
         # Torque at time t with filtering
 
         #print(tor_t, "torque at time t\n")
@@ -72,13 +74,10 @@ class InvPendulumEnv(gym.Env):
 
         self.action = tor_t
 
-        done = False
-        if newth > np.pi/8 or newth < -np.pi/8:
-            done = True
-            newth, newthdot = self.reset()
+        done = bool(newth > np.pi/8 or newth < -np.pi/8)
 
-        if 0.0078 > newthdot > -0.0078 and 2.9504e4 > newth > -2.9504e-4:
-            reward = 1
+        if 0.0078 > newthdot > -0.0078 and 2.9504e-4 > newth > -2.9504e-4:
+            reward = 10
         else:
             reward = 0
 

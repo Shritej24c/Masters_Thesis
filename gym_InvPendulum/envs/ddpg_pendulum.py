@@ -3,8 +3,9 @@ import gym
 import h5py
 
 from keras.models import Sequential, Model
-from keras.layers import Dense, Activation, Flatten, Input, Concatenate
+from keras.layers import Dense, Activation, Flatten, Input, Concatenate, ELU
 from keras.optimizers import Adam
+from keras import backend as K
 
 from rl.agents import DDPGAgent
 from rl.memory import SequentialMemory
@@ -27,10 +28,8 @@ nb_actions = env.action_space.shape[0]
 # Next, we build a very simple model.
 actor = Sequential()
 actor.add(Flatten(input_shape=(1,) + env.observation_space.shape))
-actor.add(Dense(16))
-actor.add(Activation('relu'))
-actor.add(Dense(nb_actions))
-actor.add(Activation('linear'))
+actor.add(Dense(40, activation="linear"))
+actor.add(Dense(nb_actions, activation="linear"))
 print(actor.summary())
 
 
@@ -62,11 +61,11 @@ agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-agent.fit(env, nb_steps=50000, visualize=True, verbose=1, nb_max_episode_steps=200)
+agent.fit(env, nb_steps=60000, visualize=True, verbose=1, nb_max_episode_steps=300)
 
 # After training is done, we save the final weights.
-agent.save_weights('ddpg_weights.hdf5', overwrite=True)
+#agent.save_weights('ddpg_weights.hdf5', overwrite=True)
 
 # Finally, evaluate our algorithm for 5 episodes.
-agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=200)
+agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=300)
 
