@@ -76,36 +76,6 @@ def render(mode='human'):
 
 #render()
 
-def test_record_simple():
-    env = gym.make("CartPole-v1")
-    rec = VideoRecorder(env)
-    env.reset()
-    rec.capture_frame()
-    rec.close()
-    assert not rec.empty
-    assert not rec.broken
-    assert os.path.exists(rec.path)
-    f = open(rec.path)
-    assert os.fstat(f.fileno()).st_size > 100
-
-#test_record_simple()
-
-class BrokenRecordableEnv(object):
-    metadata = {'render.modes': [None, 'rgb_array']}
-
-    def render(self, mode=None):
-        pass
-
-
-def test_no_frames():
-    env = BrokenRecordableEnv()
-    rec = VideoRecorder(env)
-    rec.close()
-    assert rec.empty
-    assert rec.functional
-    assert not os.path.exists(rec.path)
-
-
 import h5py
 import h5df
 
