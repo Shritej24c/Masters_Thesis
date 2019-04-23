@@ -48,6 +48,8 @@ class InvPendulumEnv(gym.Env):
         b = 0.8             # damping constant
         k = 8               # stiffness constant
         c = np.sqrt(40)     # noise amplitude
+        rmax = 1
+
 
         tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)[0]
         # Torque applied by the controller with additive white gaussian noise
@@ -76,10 +78,7 @@ class InvPendulumEnv(gym.Env):
 
         done = bool(newth > np.pi/8 or newth < -np.pi/8)
 
-        if 0.0078 > newthdot > -0.0078 and 2.9504e-4 > newth > -2.9504e-4:
-            reward = 10
-        else:
-            reward = 0
+        reward = rmax*np.exp(-(newth/(self.max_theta/5))**2 - (newthdot/(self.max_thetadot/5))**2)
 
         return self.state, reward, done, {}
 
