@@ -83,7 +83,7 @@ from keras.models import model_from_json
 
 Xnew = [np.array([[[0.29466096, 0.30317302]]])]
 
-json_file = open('tanh.json', 'r')
+json_file = open('Gauss_SGD_rmse.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
@@ -91,7 +91,7 @@ loaded_model = model_from_json(loaded_model_json)
 #loaded_model.predict(Xnew)
 
 # load weights into new model
-loaded_model.load_weights("tanh.h5")
+loaded_model.load_weights("Gauss_SGD_rmse.h5")
 #array = loaded_model.get_weights
 weights = np.array(loaded_model.get_weights())
 
@@ -199,7 +199,7 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
 
 import matplotlib.pyplot as plt
 
-plt.plot(play(env, loaded_model, "tanh.mp4", 1, 300, metadata_))
+plt.plot(play(env, loaded_model, "GSR.mp4", 1, 300, metadata_))
 plt.show()
 
 

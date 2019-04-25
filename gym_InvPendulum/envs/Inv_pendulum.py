@@ -22,7 +22,6 @@ class InvPendulumEnv(gym.Env):
         bounds = np.array([self.max_theta, self.max_thetadot])
 
         self.action_space = spaces.Box(low=-self.max_torque, high=self.max_torque, shape=(1,), dtype=np.float32)
-        #self.observation_space = spaces.Box(low=np.array([0, -np.sin(self.max_theta), -self.max_thetadot]), high=np.array([np.cos(self.max_theta), np.sin(self.max_theta), self.max_thetadot]), dtype=np.float32)
         self.observation_space = spaces.Box(low=-bounds,high=bounds, dtype=np.float32)
         self.seed()
 
@@ -95,7 +94,7 @@ class InvPendulumEnv(gym.Env):
 
         if self.viewer is None:
             from gym.envs.classic_control import rendering
-            self.viewer = rendering.Viewer(500, 500)
+            self.viewer = rendering.Viewer(500, 500)        
             self.viewer.set_bounds(-2.2, 2.2, -2.2, 2.2)
 
             surface = rendering.Line(start=(-1.2, -0.05), end=(1.2, -0.05))
