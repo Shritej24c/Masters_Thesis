@@ -12,8 +12,9 @@ from rl.memory import SequentialMemory
 from rl.random import OrnsteinUhlenbeckProcess
 
 from Inv_pendulum import InvPendulumEnv
+from Test_Env import PendulumEnv
 
-env = InvPendulumEnv()
+env = gym.make('Inverted_Pendulum-v0')
 
 #ENV_NAME = 'Inverted_Pendulum-v0'
 
@@ -58,7 +59,7 @@ random_process = OrnsteinUhlenbeckProcess(size=nb_actions, theta=.15, mu=0., sig
 agent = DDPGAgent(nb_actions=nb_actions, actor=actor, critic=critic, critic_action_input=action_input,
                   memory=memory, nb_steps_warmup_critic=100, nb_steps_warmup_actor=100,
                   random_process=random_process, gamma=.99, target_model_update=1e-3)
-agent.compile(SGD(lr=.1, clipnorm=1.), metrics=['mean_squared_error'])
+agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
