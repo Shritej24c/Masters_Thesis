@@ -3,6 +3,7 @@ from gym import spaces
 from gym.utils import seeding
 import numpy as np
 from os import path
+from gym.envs.registration import register
 
 class PendulumEnv(gym.Env):
     metadata = {
@@ -11,8 +12,8 @@ class PendulumEnv(gym.Env):
     }
 
     def __init__(self):
-        self.max_speed = 8
-        self.max_torque = 2.
+        self.max_speed = .5
+        self.max_torque = 300
         self.dt = .05
         self.viewer = None
 
@@ -29,9 +30,9 @@ class PendulumEnv(gym.Env):
     def step(self,u):
         th, thdot = self.state # th := theta
 
-        g = 10.
-        m = 1.
-        l = 1.
+        g = 9.8
+        m = 65
+        l = 1.1
         dt = self.dt
 
         u = np.clip(u, -self.max_torque, self.max_torque)[0]
@@ -86,5 +87,13 @@ class PendulumEnv(gym.Env):
             self.viewer.close()
             self.viewer = None
 
+
 def angle_normalize(x):
-    return (((x+np.pi) % (2*np.pi)) - np.pi)
+    return ((x+np.pi) % (2*np.pi)) - np.pi
+
+
+register(
+    id='Test_Inv_pendulum-v0',
+    entry_point='Inv_pendulum:PendulumEnv',
+    kwargs={}
+)
