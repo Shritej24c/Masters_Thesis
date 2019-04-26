@@ -14,7 +14,10 @@ from rl.random import OrnsteinUhlenbeckProcess
 from Inv_pendulum import InvPendulumEnv
 from Test_Env import PendulumEnv
 
-env = gym.make('Inverted_Pendulum-v0')
+Testenv = 'Test_Inv_pendulum-v0'
+Env = 'Inverted_Pendulum-v0'
+
+env = gym.make(Testenv)
 
 #ENV_NAME = 'Inverted_Pendulum-v0'
 
