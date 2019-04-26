@@ -4,6 +4,7 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 from os import path
 import random
+from gym.envs.registration import register
 
 
 class InvPendulumEnv(gym.Env):
@@ -154,6 +155,11 @@ class InvPendulumEnv(gym.Env):
             self.viewer = None
 
 
+register(
+    id='Inverted_Pendulum-v0',
+    entry_point='gym_InvPendulum.envs.Inv_pendulum:InvPendulumEnv',
+    kwargs={}
+)
 
 
 
