@@ -50,7 +50,6 @@ class InvPendulumEnv(gym.Env):
         c = np.sqrt(40)     # noise amplitude
         rmax = 1
 
-
         tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)[0]
         # Torque applied by the controller with additive white gaussian noise
         #print(tor_con,"torque by controller \n")
@@ -78,9 +77,9 @@ class InvPendulumEnv(gym.Env):
 
         done = bool(newth > np.pi/8 or newth < -np.pi/8)
 
-        reward = rmax*np.exp(-(newth/(self.max_theta/5))**2 - (newthdot/(self.max_thetadot/5))**2)
+        costs = th**2 + 0.1*thdot**2
 
-        return self.state, reward, done, {}
+        return self.state, -costs, done, {}
 
     def reset(self):
         init_th = ((random.random() - 0.5) * 2) * 5
