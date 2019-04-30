@@ -83,7 +83,7 @@ from keras.models import model_from_json
 
 Xnew = [np.array([[[0.29466096, 0.30317302]]])]
 
-json_file = open('Gauss_SGD_rmse.json', 'r')
+json_file = open('default_reward_wo_tor.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
@@ -91,7 +91,7 @@ loaded_model = model_from_json(loaded_model_json)
 #loaded_model.predict(Xnew)
 
 # load weights into new model
-loaded_model.load_weights("Gauss_SGD_rmse.h5")
+loaded_model.load_weights("default_reward_wo_tor.h5")
 #array = loaded_model.get_weights
 weights = np.array(loaded_model.get_weights())
 
@@ -134,7 +134,7 @@ def actor(obs, weights):
 X = np.array([0.29466096, 0.30317302])
 #print(actor(X,weights))
 
-env = InvPendulumEnv()
+env = gym.make('Inverted_Pendulum-v0')
 
 
 def play_og(env, act, stochastic, video_path):
@@ -169,9 +169,12 @@ theta = []
 theta_dot = []
 actions = []
 
+sin_theta = []
+cos_theta = []
+theta_dot = []
+
 
 def play(env, model, video_path, num_episodes, timesteps, metadata):
-    video_recorder = None
     for i_episodes in range(num_episodes):
         video_recorder = VideoRecorder(
             env=env, path=video_path, metadata=metadata, enabled=video_path is not None)
@@ -193,13 +196,20 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
                 video_recorder.close()
                 video_recorder.enabled = False
                 break
+            elif t == timesteps-1:
+                print("The episode done with all the timesteps")
+                print("Saved video")
+                video_recorder.close()
+                video_recorder.enabled = False
+                break
     env.close()
     return theta
 
 
 import matplotlib.pyplot as plt
 
-plt.plot(play(env, loaded_model, "GSR.mp4", 1, 300, metadata_))
+
+plt.plot(play(env, loaded_model, "D_reward_no_tor_5.mp4", 1, 300, metadata_))
 plt.show()
 
 
