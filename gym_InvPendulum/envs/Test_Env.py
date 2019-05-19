@@ -4,16 +4,17 @@ from gym.utils import seeding
 import numpy as np
 from os import path
 from gym.envs.registration import register
+import random
 
 class PendulumEnv(gym.Env):
     metadata = {
-        'render.modes' : ['human', 'rgb_array'],
-        'video.frames_per_second' : 30
+        'render.modes': ['human', 'rgb_array'],
+        'video.frames_per_second': 30
     }
 
     def __init__(self):
-        self.max_speed = .5
-        self.max_torque = 300
+        self.max_speed = 8
+        self.max_torque = 2
         self.dt = .05
         self.viewer = None
 
@@ -28,28 +29,38 @@ class PendulumEnv(gym.Env):
         return [seed]
 
     def step(self,u):
-        th, thdot = self.state # th := theta
+        th, thdot = self.state # th :=  theta
 
-        g = 9.8
-        m = 65
-        l = 1.1
+        g = 10
+        m = 1.
+        l = 1.
         dt = self.dt
+        b = 0.8  # damping constant
+        k = 8  # stiffness constant
 
         u = np.clip(u, -self.max_torque, self.max_torque)[0]
         self.last_u = u # for rendering
         costs = angle_normalize(th)**2 + .1*thdot**2 + .001*(u**2)
+        I = m * (l ** 2)
+        # Moment of Inertia
 
-        newthdot = thdot + (-3*g/(2*l) * np.sin(th + np.pi) + 3./(m*l**2)*u) * dt
+        newthdot = thdot + (u + m * g * l * np.sin(th) - b * thdot - k * thdot) / I * dt
+        #newthdot = thdot + (-3*g/(2*l) * np.sin(th + np.pi) + 3./(m*l**2)*u) * dt
         newth = th + newthdot*dt
         newthdot = np.clip(newthdot, -self.max_speed, self.max_speed) #pylint: disable=E1111
+
+
 
         self.state = np.array([newth, newthdot])
         return self._get_obs(), -costs, False, {}
 
     def reset(self):
-        high = np.array([np.pi, 1])
-        self.state = self.np_random.uniform(low=-high, high=high)
-        self.last_u = None
+        init_th = ((random.random() - 0.5) * 2) * 5
+        init_thr = init_th * np.pi / 180
+        init_thdotr = ((random.random() - 0.5) * 2) * 0.0625
+        self.state = np.array([init_thr, init_thdotr])
+        # print(self.state, "Initial State")
+        self.action = 0
         return self._get_obs()
 
     def _get_obs(self):
@@ -70,7 +81,7 @@ class PendulumEnv(gym.Env):
             axle = rendering.make_circle(.05)
             axle.set_color(0,0,0)
             self.viewer.add_geom(axle)
-            fname = path.join(path.dirname(__file__), "assets/clockwise.png")
+            fname = path.join(path.dirname(__file__), "clockwise.png")
             self.img = rendering.Image(fname, 1., 1.)
             self.imgtrans = rendering.Transform()
             self.img.add_attr(self.imgtrans)
@@ -80,7 +91,7 @@ class PendulumEnv(gym.Env):
         if self.last_u:
             self.imgtrans.scale = (-self.last_u/2, np.abs(self.last_u)/2)
 
-        return self.viewer.render(return_rgb_array = mode=='rgb_array')
+        return self.viewer.render(return_rgb_array=mode == 'rgb_array')
 
     def close(self):
         if self.viewer:
@@ -94,6 +105,6 @@ def angle_normalize(x):
 
 register(
     id='Test_Inv_pendulum-v0',
-    entry_point='Inv_pendulum:PendulumEnv',
+    entry_point='Test_Env:PendulumEnv',
     kwargs={}
 )

@@ -3,7 +3,7 @@ import gym
 import h5py
 
 from keras.models import Sequential, Model
-from keras.layers import Dense, Activation, Flatten, Input, Concatenate, ELU
+from keras.layers import Dense, Activation, Flatten, Input, Concatenate, ELU, BatchNormalization
 from keras.optimizers import Adam, SGD
 from keras import backend as K
 
@@ -19,11 +19,9 @@ Env = 'Inverted_Pendulum-v0'
 
 env = gym.make(Testenv)
 
-#ENV_NAME = 'Inverted_Pendulum-v0'
-
 
 # Get the environment and extract the number of actions.
-#env = gym.make(ENV_NAME)
+
 np.random.seed(123)
 env.seed(123)
 assert len(env.action_space.shape) == 1
@@ -67,7 +65,7 @@ agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-agent.fit(env, nb_steps=60000, visualize=True, verbose=1, nb_max_episode_steps=300)
+agent.fit(env, nb_steps=60000, visualize=False, verbose=1, nb_max_episode_steps=300)
 
 # After training is done, we save the final weights.
 #agent.save_weights('ddpg_weights.hdf5', overwrite=True)
@@ -75,3 +73,4 @@ agent.fit(env, nb_steps=60000, visualize=True, verbose=1, nb_max_episode_steps=3
 # Finally, evaluate our algorithm for 5 episodes.
 agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=300)
 
+d
