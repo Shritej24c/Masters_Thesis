@@ -1,8 +1,7 @@
 import numpy as np
 import gym
-import h5py
 
-from keras.models import Sequential, Model
+from keras.models import Sequential, Model, load_model
 from keras.layers import Dense, Activation, Flatten, Input, Concatenate, ELU, BatchNormalization
 from keras.optimizers import Adam, SGD
 from keras import backend as K
@@ -11,13 +10,11 @@ from rl.agents import DDPGAgent
 from rl.memory import SequentialMemory
 from rl.random import OrnsteinUhlenbeckProcess
 
-from Inv_pendulum import InvPendulumEnv
-from Test_Env import PendulumEnv
-
 Testenv = 'Test_Inv_pendulum-v0'
 Env = 'Inverted_Pendulum-v0'
+Og_Env = 'Pendulum-v0'
 
-env = gym.make(Testenv)
+env = gym.make(Env)
 
 
 # Get the environment and extract the number of actions.
@@ -68,9 +65,8 @@ agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
 agent.fit(env, nb_steps=60000, visualize=False, verbose=1, nb_max_episode_steps=300)
 
 # After training is done, we save the final weights.
-#agent.save_weights('ddpg_weights.hdf5', overwrite=True)
+actor.save('ddpg_weights.h5', overwrite=True)
 
 # Finally, evaluate our algorithm for 5 episodes.
 agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=300)
 
-d

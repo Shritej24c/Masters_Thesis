@@ -10,7 +10,6 @@ import distutils.spawn,distutils.version
 from six import StringIO
 import six
 from gym import error, logger
-from Inv_pendulum import InvPendulumEnv
 
 metadata_ = {
         'render.modes': ['human', 'rgb_array'],
@@ -83,6 +82,7 @@ from keras.models import model_from_json
 
 Xnew = [np.array([[[0.29466096, 0.30317302]]])]
 
+'''
 json_file = open('default_reward_wo_tor.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
@@ -100,6 +100,10 @@ weights = np.array(loaded_model.get_weights())
 
 #print("Loaded model from disk")
 #print(weights.shape)
+'''
+from keras.models import load_model
+
+model = load_model("ddpg_weights.h5")
 
 
 def relu(output):
@@ -209,8 +213,8 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
 import matplotlib.pyplot as plt
 
 
-plt.plot(play(env, loaded_model, "D_reward_no_tor_5.mp4", 1, 300, metadata_))
-plt.show()
+#plt.plot(play(env, loaded_model, "D_reward_no_tor_5.mp4", 1, 300, metadata_))
+#plt.show()
 
 
 
