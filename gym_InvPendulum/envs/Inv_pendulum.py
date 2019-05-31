@@ -1,6 +1,6 @@
 import gym
 import numpy as np
-from gym import error, spaces, utils
+from gym import  spaces
 from gym.utils import seeding
 from os import path
 import random
@@ -32,13 +32,9 @@ class InvPendulumEnv(gym.Env):
 
     def step(self, tor):
 
-        #print(tor, "Action provided for the next timestep")
-
         th, thdot = self.state
-        #print("Theta", "Thetadot", th, thdot,'\n')
 
         tor_prev = self.action      # Action at time t-1
-        #print("previous timestep torque", tor_prev)
 
         g = 9.8             # acceleration due to gravity
         m = 65              # Mass
@@ -52,24 +48,20 @@ class InvPendulumEnv(gym.Env):
 
         tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)[0]
         # Torque applied by the controller with additive white gaussian noise
-        #print(tor_con,"torque by controller \n")
 
         tor_t = a * tor_con + (1 - a)*tor_prev
         # Torque at time t with filtering
 
-        #print(tor_t, "torque at time t\n")
         I = m * (l ** 2)
         # Moment of Inertia
 
         newthdot = thdot + (tor_t + m * g * l * np.sin(th)) / I * dt
         # dynamical equation solved by euler method
-        #print(newthdot, "newthetadot")
 
         newth = th + newthdot * dt
 
         newthdot = np.clip(newthdot, -self.max_thetadot, self.max_thetadot)
         #Clipping the value of angular velocity
-        #print("New thetadot and theta", newthdot, newth)
 
         self.state = np.array([newth, newthdot])
 
@@ -86,7 +78,6 @@ class InvPendulumEnv(gym.Env):
         init_thr = init_th * np.pi / 180
         init_thdotr = ((random.random() - 0.5) * 2) * 0.0625
         self.state = np.array([init_thr, init_thdotr])
-        #print(self.state, "Initial State")
         self.action = 0
         return self.state
 
