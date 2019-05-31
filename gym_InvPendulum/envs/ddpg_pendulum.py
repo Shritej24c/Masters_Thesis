@@ -10,6 +10,10 @@ from rl.agents import DDPGAgent
 from rl.memory import SequentialMemory
 from rl.random import OrnsteinUhlenbeckProcess
 
+
+from Inv_pendulum import InvPendulumEnv
+from Test_Env import PendulumEnv
+
 Testenv = 'Test_Inv_pendulum-v0'
 Env = 'Inverted_Pendulum-v0'
 Og_Env = 'Pendulum-v0'
@@ -62,10 +66,10 @@ agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-agent.fit(env, nb_steps=60000, visualize=False, verbose=1, nb_max_episode_steps=300)
+agent.fit(env, nb_steps=60000, visualize=True, verbose=1, nb_max_episode_steps=300)
 
 # After training is done, we save the final weights.
-actor.save('ddpg_weights.h5', overwrite=True)
+actor.save('No_filtering.h5', overwrite=True)
 
 # Finally, evaluate our algorithm for 5 episodes.
 agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=300)
