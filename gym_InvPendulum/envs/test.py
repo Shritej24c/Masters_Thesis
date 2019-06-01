@@ -17,6 +17,9 @@ metadata_ = {
     }
 
 
+#Rendering for Inverted Pendulum
+
+
 def render(mode='human'):
     from gym.envs.classic_control import rendering
     viewer = rendering.Viewer(500, 500)
@@ -82,6 +85,26 @@ from keras.models import model_from_json
 
 Xnew = [np.array([[[0.29466096, 0.30317302]]])]
 
+
+def render_og(mode='human'):
+    from gym.envs.classic_control import rendering
+    viewer = rendering.Viewer(500, 500)
+    viewer.set_bounds(-2.2, 2.2, -2.2, 2.2)
+    rod = rendering.make_capsule(1, .2)
+    rod.set_color(.8, .3, .3)
+    pole_transform = rendering.Transform()
+    rod.add_attr(pole_transform)
+    viewer.add_geom(rod)
+    axle = rendering.make_circle(.05)
+    axle.set_color(0, 0, 0)
+    viewer.add_geom(axle)
+    pole_transform.set_rotation(np.pi/2)
+    return viewer.render(return_rgb_array=mode == 'rgb_array')
+
+
+#render_og()
+
+
 '''
 json_file = open('default_reward_wo_tor.json', 'r')
 loaded_model_json = json_file.read()
@@ -101,9 +124,10 @@ weights = np.array(loaded_model.get_weights())
 #print("Loaded model from disk")
 #print(weights.shape)
 '''
+
 from keras.models import load_model
 
-model = load_model("ddpg_weights.h5")
+model = load_model("No_filtering_step.h5")
 
 
 def relu(output):
@@ -138,6 +162,10 @@ def actor(obs, weights):
 X = np.array([0.29466096, 0.30317302])
 #print(actor(X,weights))
 
+
+from Inv_pendulum import InvPendulumEnv
+
+
 env = gym.make('Inverted_Pendulum-v0')
 
 
@@ -164,11 +192,6 @@ def play_og(env, act, stochastic, video_path):
             num_episodes = len(info["rewards"])
 
 
-videos = ["test.mp4"]
-
-for i in range(10):
-    videos.append("test"+ str(i) + ".mp4")
-
 theta = []
 theta_dot = []
 actions = []
@@ -183,6 +206,7 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
         video_recorder = VideoRecorder(
             env=env, path=video_path, metadata=metadata, enabled=video_path is not None)
         obs = env.reset()
+        print(obs)
         for t in range(timesteps):
             obs = [np.array([[list(obs)]])]
             video_recorder.capture_frame()
@@ -213,8 +237,8 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
 import matplotlib.pyplot as plt
 
 
-#plt.plot(play(env, loaded_model, "D_reward_no_tor_5.mp4", 1, 300, metadata_))
-#plt.show()
+plt.plot(play(env, model, "No_filtering_step.mp4", 1, 300, metadata_))
+plt.show()
 
 
 
