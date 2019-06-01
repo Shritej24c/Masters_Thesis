@@ -1,6 +1,6 @@
 import gym
 import numpy as np
-from gym import  spaces
+from gym import spaces
 from gym.utils import seeding
 from os import path
 import random
@@ -42,7 +42,6 @@ class InvPendulumEnv(gym.Env):
         b = 0.8             # damping constant
         k = 8               # stiffness constant
         c = np.sqrt(40)     # noise amplitude
-        rmax = 1
 
         tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)[0]
         # Torque applied by the controller with additive white gaussian noise
@@ -50,7 +49,7 @@ class InvPendulumEnv(gym.Env):
         I = m * (l ** 2)
         # Moment of Inertia
 
-        newthdot = thdot + (tor_con + m * g * l * np.sin(th) - b*thdot - k*thdot) / I * dt
+        newthdot = thdot + (tor_con + m * g * l * np.sin(th)) / I * dt
         # dynamical equation solved by euler method
 
         newth = th + newthdot * dt
@@ -73,6 +72,7 @@ class InvPendulumEnv(gym.Env):
         init_thr = init_th * np.pi / 180
         init_thdotr = ((random.random() - 0.5) * 2) * 0.0625
         self.state = np.array([init_thr, init_thdotr])
+        self.action = 0
         return self.state
 
     def render(self, mode='human'):
@@ -144,7 +144,4 @@ register(
     entry_point='Inv_pendulum:InvPendulumEnv',
     kwargs={}
 )
-
-
-
 
