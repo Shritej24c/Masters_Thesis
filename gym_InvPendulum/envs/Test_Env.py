@@ -6,6 +6,7 @@ from os import path
 from gym.envs.registration import register
 import random
 
+
 class PendulumEnv(gym.Env):
     metadata = {
         'render.modes': ['human', 'rgb_array'],
@@ -48,9 +49,6 @@ class PendulumEnv(gym.Env):
         #newthdot = thdot + (-3*g/(2*l) * np.sin(th + np.pi) + 3./(m*l**2)*u) * dt
         newth = th + newthdot*dt
         newthdot = np.clip(newthdot, -self.max_speed, self.max_speed) #pylint: disable=E1111
-
-
-
         self.state = np.array([newth, newthdot])
         return self._get_obs(), -costs, False, {}
 
