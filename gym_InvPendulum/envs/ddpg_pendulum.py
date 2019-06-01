@@ -66,11 +66,11 @@ agent.compile(Adam(lr=.001, clipnorm=1.), metrics=['mae'])
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-agent.fit(env, nb_steps=60000, visualize=True, verbose=1, nb_max_episode_steps=300)
+agent.fit(env, nb_steps=50000, visualize=True, verbose=1, nb_max_episode_steps=200)
 
 # After training is done, we save the final weights.
-actor.save('No_filtering.h5', overwrite=True)
+actor.save('No_filtering_step.h5', overwrite=True)
 
 # Finally, evaluate our algorithm for 5 episodes.
-agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=300)
+agent.test(env, nb_episodes=5, visualize=True, nb_max_episode_steps=200)
 
