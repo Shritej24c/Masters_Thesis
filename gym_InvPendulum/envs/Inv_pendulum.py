@@ -63,7 +63,7 @@ class InvPendulumEnv(gym.Env):
 
         done = bool(newth > np.pi/8 or newth < -np.pi/8)
 
-        costs = th**2 + 0.1*thdot**2
+        costs = th**2 + 0.1*thdot**2 + .01*tor_con**(-2)
 
         return self.state, -costs, done, {}
 
