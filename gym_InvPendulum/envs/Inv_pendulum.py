@@ -54,7 +54,7 @@ class InvPendulumEnv(gym.Env):
         I = m * (l ** 2)
         # Moment of Inertia
 
-        newthdot = thdot + (tor_con + m * g * l * np.sin(th) - b*thdot - k*thdot) / I * dt
+        newthdot = thdot + (tor_con + m * g * l * np.sin(th)) / I * dt
         # dynamical equation solved by euler method
 
         newth = th + newthdot * dt
