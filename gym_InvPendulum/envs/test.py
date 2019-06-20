@@ -5,8 +5,18 @@ import matplotlib.pyplot as plt
 import Inv_pendulum
 from stable_baselines import DDPG
 from stable_baselines.common.vec_env import DummyVecEnv
+'''
+import sys
+import pkg_resources
 
+import stable_baselines
 
+# Fix for breaking change for DDPG buffer in v2.6.0
+if pkg_resources.get_distribution("stable_baselines").version >= "2.6.0":
+    sys.modules['stable_baselines.ddpg.memory'] = stable_baselines.deepq.replay_buffer
+    stable_baselines.deepq.replay_buffer.Memory = stable_baselines.deepq.replay_buffer.ReplayBuffer
+
+'''
 metadata_ = {
         'render.modes': ['human', 'rgb_array'],
         'video.frames_per_second': 30
@@ -28,7 +38,7 @@ print("Xnew", Xnew)
 print("X",X)
 print("obs", obs_)
 
-model_ = DDPG.load("DDPG_baselines")
+model_ = DDPG.load("DDPG_d_f")
 
 
 theta = []
@@ -68,6 +78,6 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
     return theta
 
 
-plt.plot(np.array(play(env_, model_, "DDPG_nd.mp4", 1, 1000, metadata_)))
+plt.plot(np.array(play(env_, model_, "DDPG_d_f.mp4", 1, 1000, metadata_)))
 plt.show()
 
