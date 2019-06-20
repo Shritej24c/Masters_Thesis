@@ -34,7 +34,7 @@ class InvPendulumEnv(gym.Env):
 
         th, thdot = self.state
 
-        #tor_prev = self.action  # Action at time t-1
+        tor_prev = self.action  # Action at time t-1
 
         g = 9.8             # acceleration due to gravity
         m = 65              # Mass
@@ -48,13 +48,13 @@ class InvPendulumEnv(gym.Env):
         tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)[0]
         # Torque applied by the controller with additive white gaussian noise
 
-        #tor_t = a * tor_con + (1 - a) * tor_prev
+        tor_t = a * tor_con + (1 - a) * tor_prev
         # Torque at time t with filtering
 
         I = m * (l ** 2)
         # Moment of Inertia
 
-        newthdot = thdot + (tor_con + m * g * l * np.sin(th)) / I * dt
+        newthdot = thdot + (tor_con + m * g * l * np.sin(th) - k*thdot - b*thdot) / I * dt
         # dynamical equation solved by euler method
 
         newth = th + newthdot * dt
@@ -64,7 +64,7 @@ class InvPendulumEnv(gym.Env):
 
         self.state = np.array([newth, newthdot])
 
-        self.action = tor_con
+        self.action = tor_t
 
         done = bool(newth > np.pi/8 or newth < -np.pi/8)
 
