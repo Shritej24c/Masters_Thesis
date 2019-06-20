@@ -1,7 +1,6 @@
 import gym
 import pandas as pd
 import numpy as np
-import numpy as np
 
 from stable_baselines.ddpg.policies import MlpPolicy
 from stable_baselines.common.vec_env import DummyVecEnv
@@ -27,7 +26,7 @@ action_noise = OrnsteinUhlenbeckActionNoise(mean=np.zeros(n_actions), sigma=floa
 model = DDPG(MlpPolicy, env, verbose=1, param_noise=param_noise, action_noise=action_noise)
 model.learn(total_timesteps=400000)
 
-
+#model.save("ddpg_nd_f")
 
 
 
