@@ -3,7 +3,7 @@ import gym
 from gym.wrappers.monitoring.video_recorder import VideoRecorder
 import matplotlib.pyplot as plt
 import Inv_pendulum
-from stable_baselines import DDPG
+from stable_baselines import DDPG, TRPO
 from stable_baselines.common.vec_env import DummyVecEnv
 '''
 import sys
@@ -38,12 +38,40 @@ print("Xnew", Xnew)
 print("X",X)
 print("obs", obs_)
 
-model_ = DDPG.load("DDPG_d_f")
 
+a_model_name = "ddpg_sig95_buff"
+
+model_ = DDPG.load(a_model_name)
+l = 110
 
 theta = []
 theta_dot = []
 actions = []
+
+
+def plot_(env, model, timesteps):
+    obs = env.reset()
+    print(obs)
+    for t in range(timesteps):
+        action, states = model.predict(obs)
+        obs, rew, done, info = env.step(action)
+        theta.append(obs[0][0])
+        theta_dot.append(obs[0][1])
+        actions.append(action[0][0])
+        if done:
+            print("Episode finished after {} timesteps".format(t + 1))
+            break
+        elif t == timesteps - 1:
+            print("The episode done with all the timesteps")
+            break
+    env.close()
+    global cop
+    cop = l*np.sin(np.array(theta))
+    return cop
+
+plt.su
+plt.plot(plot_(env=env_, model=model_, timesteps=1000))
+plt.show()
 
 
 def play(env, model, video_path, num_episodes, timesteps, metadata):
@@ -78,6 +106,14 @@ def play(env, model, video_path, num_episodes, timesteps, metadata):
     return theta
 
 
-plt.plot(np.array(play(env_, model_, "DDPG_d_f.mp4", 1, 1000, metadata_)))
-plt.show()
+#plt.plot(l*np.sin(np.array(play(env_, model_, "DDPG_c9(1).mp4", 1, 1000, metadata_))))
+#plt.show()
 
+from scipy.fftpack import fft
+cop = cop - np.mean(cop)
+abs_ = fft(cop)
+freq = np.fft.fftfreq(cop.size, 0.01)
+cop1 = np.abs(abs_)
+plt.plot(freq, cop1)
+plt.xlim(-5, 5)
+plt.show()
