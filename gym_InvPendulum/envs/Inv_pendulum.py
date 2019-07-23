@@ -42,8 +42,8 @@ class InvPendulumEnv(gym.Env):
         dt = self.dt        # Time step
         a = 0.83            # Filtering factor
         b = 0.8             # damping constant
-        k = 8               # stiffness constant
-        c = np.sqrt(81)     # noise amplitude
+        k = 8              # stiffness constant
+        c = np.sqrt(40)     # noise amplitude
 
         tor_con = np.clip(tor, -self.max_torque, self.max_torque)[0] + c*np.random.normal(0, 1, 1)[0]
         # Torque applied by the controller with additive white gaussian noise
