@@ -14,7 +14,7 @@ class InvPendulumEnv(gym.Env):
     }
 
     def __init__(self):
-        self.max_theta = np.pi / 8  # rad
+        self.max_theta = np.pi / 8  # radians
         self.max_thetadot = 0.5     # rad/sec
         self.max_torque = 300       # N-m
         self.dt = 0.01
