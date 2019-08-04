@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import os
 from stable_baselines.ddpg.policies import MlpPolicy
-#from stable_baselines.common.policies import MlpPolicy
 from stable_baselines.common.vec_env import DummyVecEnv
 from stable_baselines import PPO2, DQN, DDPG, TRPO
 from stable_baselines.ddpg.noise import OrnsteinUhlenbeckActionNoise, ActionNoise, AdaptiveParamNoiseSpec, NormalActionNoise
