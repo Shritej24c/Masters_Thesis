@@ -8,3 +8,4 @@ The whole review of the project can be found in "Thesis_shritej.pdf" and "DDP_Re
 Environment for an inverted pendulum developed by using OpenAI Gym
 
 Stable Baselines was used for RL agent (DDPG) 
+
