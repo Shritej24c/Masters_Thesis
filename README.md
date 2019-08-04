@@ -6,4 +6,5 @@ Implemented DDPG algorithm to model the healthy adult's postural sway characteri
 The whole review of the project can be found in "Thesis_Shritej.pdf" and "DDP_review.pdf".
 
 Environment for an inverted pendulum developed by using OpenAI Gym
+
 Stable Baselines was used for RL agent (DDPG) 
