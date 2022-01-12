@@ -1,4 +1,5 @@
-# Q_Pendulum
+# Modeling Human Balance and Gait through Reinforcement Learning                ![image](https://user-images.githubusercontent.com/46397283/149203199-2a2ca114-de0f-4626-834d-2debff002da8.png)
+
 My Master's project on Balance and Gait (involving Computational Neuroscience and Deep Reinforcement Learning)
 
 Implemented DDPG algorithm to model the healthy adult's postural sway characteristics by assuming human as a inverted pendulum (a simplistic mechanical model) with 1 degree of freedom and producing optimum torque to balance it with respect to the vertical.
