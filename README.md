@@ -1,4 +1,4 @@
-# Modeling Human Balance and Gait through Reinforcement Learning                ![image]https://cecs.anu.edu.au/sites/default/files/resize/u325/2-300x598.jpg)
+# Modeling Human Balance and Gait through Reinforcement Learning                ![image](https://cecs.anu.edu.au/sites/default/files/resize/u325/2-300x598.jpg)
 
 My Master's project on Balance and Gait (involving Computational Neuroscience and Deep Reinforcement Learning)
 
