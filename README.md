@@ -1,4 +1,4 @@
-# Modeling Human Balance and Gait through Reinforcement Learning                ![image](https://www.google.com/url?sa=i&url=https%3A%2F%2Fcecs.anu.edu.au%2Fresearch%2Fstudent-research-projects%2Fpostural-sway-and-machine-learning&psig=AOvVaw2r7OOvCRHdi8bGIg6b5Mrf&ust=1642099901849000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCMi74__wrPUCFQAAAAAdAAAAABAD)
+# Modeling Human Balance and Gait through Reinforcement Learning                ![image]https://cecs.anu.edu.au/sites/default/files/resize/u325/2-300x598.jpg)
 
 My Master's project on Balance and Gait (involving Computational Neuroscience and Deep Reinforcement Learning)
 
