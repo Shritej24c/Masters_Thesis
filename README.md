@@ -2,7 +2,7 @@
 
 **Objective** - Modelling postural sway of human body while standing bipedally using simplest human mechanical architecture
 
-***Definitions*** : Sway- the horizontal movement of the centre of gravity when the person is standing still
+*Definitions* : Sway- the horizontal movement of the centre of gravity when the person is standing still
 
 In biomechanics, balance is the ability to maintain the line of gravity (vertical line from the center of mass) of a body within the base of support with minimal postural sway.
 
