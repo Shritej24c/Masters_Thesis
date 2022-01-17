@@ -4,13 +4,13 @@ My Master's project on Balance and Gait in Humans(involving Computational Neuros
 
 **Objective** - Modelling postural sway of human body while standing bipedally using simplest human mechanical architecture
 
-Definition : Sway is the horizontal movement of the centre of gravity when the person is standing still
+**Definition** : Sway is the horizontal movement of the centre of gravity when the person is standing still
 
 In biomechanics, balance is the ability to maintain the line of gravity (vertical line from the center of mass) of a body within the base of support with minimal postural sway.
 
-Postural sway can be affected in 2-D i.e. in 2 planes as seen below
+Postural sway can be affected in 2 planes, namely, Saggital and Coronal planes 
 
-![image](https://i0.wp.com/biologydictionary.net/wp-content/uploads/2017/02/Planes-of-Body.jpg)
+![image](https://i0.wp.com/biologydictionary.net/wp-content/uploads/2017/02/Planes-of-Body.jpg) ![image](http://scalar.usc.edu/works/edkp-3/media/1-300x267.png)
 
 
 
