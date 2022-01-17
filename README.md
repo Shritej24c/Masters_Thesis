@@ -1,4 +1,4 @@
-# Modeling Human Balance and Gait through Reinforcement Learning                
+# Modeling Human Balance and Gait  
 
 My Master's project on Balance and Gait in Humans(involving Computational Neuroscience and Deep Reinforcement Learning)
 
