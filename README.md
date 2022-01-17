@@ -4,6 +4,15 @@ My Master's project on Balance and Gait in Humans(involving Computational Neuros
 
 **Objective** - Modelling postural sway of human body while standing bipedally using simplest human mechanical architecture
 
+Definition : Sway is the horizontal movement of the centre of gravity when the person is standing still
+
+In biomechanics, balance is the ability to maintain the line of gravity (vertical line from the center of mass) of a body within the base of support with minimal postural sway.
+
+Postural sway can be affected in 2-D i.e. in 2 planes as seen below
+
+![image](https://i0.wp.com/biologydictionary.net/wp-content/uploads/2017/02/Planes-of-Body.jpg)
+
+
 
 Implemented DDPG algorithm to model the healthy adult's postural sway characteristics by assuming human as a inverted pendulum (a simplistic mechanical model) with 1 degree of freedom and producing optimum torque to balance it with respect to the vertical.
 
