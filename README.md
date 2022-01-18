@@ -24,6 +24,7 @@ Healthy study subjects were made to stand on a force sensing platform and their 
 
  ![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/ijerph-18-02696-g001-550.jpeg)
  
+ 
  Below is the real data of Sway of 4 Healthy Adults and their respective frequency spectrum 
  
  ![alt text](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Real%20Data.png)
@@ -36,16 +37,40 @@ Due to the similar reward-based learning observed in human movements, we adopted
 
 **Reinforcement Learning**
 
-Reinforcement Learning (RL) is the science of decision making. It is about learning the optimal behavior in an environment to obtain maximum reward. This optimal behavior is learned through interactions with the environment and observations of how it responds, similar to children exploring the world around them and learning the actions that help them achieve a goal.
+Reinforcement Learning (RL) is the science of decision making. It is about learning the optimal behavior in an environment to obtain maximum reward. This optimal behavior is learned through interactions with the environment and observations of how it responds, similar to video game player playing Mario, exploring the world around him and learning the actions that help them achieve the maximum reward towards the end of the level or turn.
  
 
-![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Screenshot%202022-01-18%20at%209.49.14%20PM.png)
+![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Mario.png)
+
+
+**Approach**
+
+States of the RL agent - Angular Displacement with respect to the vertical and Angular Velocity of the pendulum
+
+Actions - Torque applied to the pendulum
+
+Reward - Function of Angular Velocity and Angular Displacment ( R = -(T^2 + 0.1*V*^2) )
+
+![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Block%20Diagram.png)
+
+OpenAI Gym was use to build the RL environment and Stable Baseline to train the Rl agent.
+
+A deep reinforcement learning algorithm called Deep Deterministic Policy Gradient (DDPG) algorithm was used for continuous action space  considering the problem statement
+
+
+**Results**
+
+
+Below you can see how sway and torque applied varies with the time. The pendulum is trained for 1000 epochs that is 10 secs
+
+![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Sway%20Result.png)
+![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Torque%20Result.png)
 
 
 
-Implemented DDPG algorithm to model the healthy adult's postural sway characteristics by assuming human as a inverted pendulum (a simplistic mechanical model) with 1 degree of freedom and producing optimum torque to balance it with respect to the vertical.
 
-![image](https://cecs.anu.edu.au/sites/default/files/resize/u325/2-300x598.jpg)
+
+
 
 
 The whole review of the project can be found in "Thesis_shritej.pdf" and "DDP_Review.pdf".
