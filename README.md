@@ -1,16 +1,28 @@
 # Modeling Human Balance and Gait  
 
-**Objective** - Modelling postural sway of human body while standing bipedally using simplest human mechanical architecture
 
-*Definitions* : Sway- the horizontal movement of the centre of gravity when the person is standing still
+
+**Understanding Balance in Humans**
+
 
 In biomechanics, balance is the ability to maintain the line of gravity (vertical line from the center of mass) of a body within the base of support with minimal postural sway.
 
-Postural sway can be seen in 2 dimensional, that is in, Saggital and Coronal plane
+Sway is the horizontal movement of the centre of gravity when the person is standing still
 
-![image](https://i0.wp.com/biologydictionary.net/wp-content/uploads/2017/02/Planes-of-Body.jpg) 
-![image](http://scalar.usc.edu/works/edkp-3/media/1-300x267.png)
+Postural sway can be observed in 2 dimensional : Mediolateral(ML) or Coronal or Frontal plane and Anterioposterial(AP) or Saggital plane
 
+![image](https://scalar.usc.edu/works/edkp-3/media/1-300x267.png) 
+
+
+**Objective**
+
+Modelling postural sway of human body while standing bipedally using simplest human mechanical architecture
+
+**Data**
+
+Healthy study subjects were made to stand on a force sensing platform and their movement of Centre of Pressure (CoP) was measured with time
+
+![image](https://www.mdpi.com/ijerph/ijerph-18-02696/article_deploy/html/images/ijerph-18-02696-g001-550.jpg) 
 
 
 Implemented DDPG algorithm to model the healthy adult's postural sway characteristics by assuming human as a inverted pendulum (a simplistic mechanical model) with 1 degree of freedom and producing optimum torque to balance it with respect to the vertical.
