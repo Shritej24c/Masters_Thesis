@@ -20,9 +20,14 @@ Modelling postural sway of human body while standing bipedally using simplest hu
 
 **Data**
 
-Healthy study subjects were made to stand on a force sensing platform and their movement of Centre of Pressure (CoP) was measured with time
+Healthy study subjects were made to stand on a force sensing platform and their movement of Centre of Pressure (CoP) was measured with time. View the following image for illustration purposes
 
-![image](https://ibb.co/9Gpv7pW) 
+ ![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/ijerph-18-02696-g001-550.jpeg)
+ 
+ Below is the real data of Sway of 4 Healthy Adults and their respective frequency spectrum 
+ 
+ ![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Real%20Data.png)
+ 
 
 
 Implemented DDPG algorithm to model the healthy adult's postural sway characteristics by assuming human as a inverted pendulum (a simplistic mechanical model) with 1 degree of freedom and producing optimum torque to balance it with respect to the vertical.
