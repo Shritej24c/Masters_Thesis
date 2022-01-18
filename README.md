@@ -26,7 +26,19 @@ Healthy study subjects were made to stand on a force sensing platform and their 
  
  Below is the real data of Sway of 4 Healthy Adults and their respective frequency spectrum 
  
- ![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Real%20Data.png)
+ ![alt text](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Real%20Data.png)
+ 
+ **Modeling**
+ 
+For a rudimentary approach, we assumed a human body as an inverted pendulum where the length of the pendulum is the distance from average human's center of mass to point of contact with the ground.
+
+Due to the similar reward-based learning observed in human movements, we adopted Reinforcement Learning methodology to model the postural sway.
+
+**Reinforcement Learning**
+
+![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Screenshot%202022-01-18%20at%209.49.14%20PM.png)
+
+Reinforcement Learning (RL) is the science of decision making. It is about learning the optimal behavior in an environment to obtain maximum reward. This optimal behavior is learned through interactions with the environment and observations of how it responds, similar to children exploring the world around them and learning the actions that help them achieve a goal.
  
 
 
