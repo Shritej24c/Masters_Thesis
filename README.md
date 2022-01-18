@@ -36,10 +36,11 @@ Due to the similar reward-based learning observed in human movements, we adopted
 
 **Reinforcement Learning**
 
-![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Screenshot%202022-01-18%20at%209.49.14%20PM.png)
-
 Reinforcement Learning (RL) is the science of decision making. It is about learning the optimal behavior in an environment to obtain maximum reward. This optimal behavior is learned through interactions with the environment and observations of how it responds, similar to children exploring the world around them and learning the actions that help them achieve a goal.
  
+
+![image](https://github.com/Shritej24c/Masters_Thesis/blob/master/Images/Screenshot%202022-01-18%20at%209.49.14%20PM.png)
+
 
 
 Implemented DDPG algorithm to model the healthy adult's postural sway characteristics by assuming human as a inverted pendulum (a simplistic mechanical model) with 1 degree of freedom and producing optimum torque to balance it with respect to the vertical.
